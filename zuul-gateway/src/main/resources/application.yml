@@ -28,8 +28,8 @@ eureka:
     non-secure-port-enabled: true
     leaseRenewalIntervalInSeconds: 5
     nonSecurePort: 8080
-    statusPageUrlPath: http://zuul-gateway:8080/info
-    status-page-url: http://zuul-gateway:8080/info
+    statusPageUrlPath: http://zuul-gateway.excel.k8m.excel.io:8080/info
+    status-page-url: http://zuul-gateway.excel.k8m.excel.io:8080/info
     healthCheckUrlPath: http://zuul-gateway:8080/health
     homePageUrl: https://zuul-gateway:8080/
     home-page-url: https://zuul-gateway:8080/

@@ -26,8 +26,8 @@ eureka:
     non-secure-port-enabled: true
     leaseRenewalIntervalInSeconds: 5
     nonSecurePort: 5080
-    statusPageUrlPath: http://sample-service:5080/info
-    status-page-url: http://sample-service:5080/info
+    statusPageUrlPath: http://sample-service.excel.k8m.excel.io/info
+    status-page-url: http://sample-service.excel.k8m.excel.io/info
     healthCheckUrlPath: http://sample-service:5080/health
     homePageUrl: https://sample-service:5080/
     home-page-url: https://sample-service:5080/
