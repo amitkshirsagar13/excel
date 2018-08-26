@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: zuul-gateway
+
+server:
+  port: 8080
+
+security:
+  basic:
+    enabled: false
+management:
+  context-path: /admin
+  security:
+    enabled: false
+eureka:
+  client:
+    fetchRegistry: true
+    preferIpAddress: true
+    healthcheck:
+      enabled: false
+    enabled: true
+    serviceUrl:
+      defaultZone: http://eureka-service:8761/eureka
+  instance:
+    hostname: zuul-gateway
+    virtual-host-name: zuul-gateway
+    secure-port-enabled: false
+    non-secure-port-enabled: true
+    leaseRenewalIntervalInSeconds: 5
+    nonSecurePort: 8080
+    statusPageUrlPath: http://zuul-gateway:8080/info
+    status-page-url: http://zuul-gateway:8080/info
+    healthCheckUrlPath: http://zuul-gateway:8080/health
+    homePageUrl: https://zuul-gateway:8080/
+    home-page-url: https://zuul-gateway:8080/
+    
+    
+zuul:
+  routes:
+    micro-service:
+      path: /microservice/**
+      url: http://localhost:5080/

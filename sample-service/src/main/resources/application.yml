@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: sample-service
+
+server:
+  port: 5080
+
+security:
+  basic:
+    enabled: false
+management:
+  context-path: /admin
+  security:
+    enabled: false
+eureka:
+  client:
+    healthcheck:
+      enabled: false
+    enabled: true
+    serviceUrl:
+      defaultZone: http://eureka-service:8761/eureka
+  instance:
+    hostname: sample-service
+    virtual-host-name: sample-service
+    secure-port-enabled: false
+    non-secure-port-enabled: true
+    leaseRenewalIntervalInSeconds: 5
+    nonSecurePort: 5080
+    statusPageUrlPath: http://sample-service:5080/info
+    status-page-url: http://sample-service:5080/info
+    healthCheckUrlPath: http://sample-service:5080/health
+    homePageUrl: https://sample-service:5080/
+    home-page-url: https://sample-service:5080/

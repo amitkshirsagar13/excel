@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: excel
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sample-service
+  namespace: excel
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sample-service
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: sample-service
+        image: amitkshirsagar13/excel-sample-service
+        ports:
+        - containerPort: 5080
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sample-service
+  namespace: excel
+spec:
+  selector:
+    app: sample-service
+  ports:
+    - protocol: TCP
+      port: 5080
+      targetPort: 5080
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/tls-acme: "true"
+  name: sample-service
+  namespace: excel
+spec:
+  backend:
+    serviceName: default-http-backend
+    servicePort: 80
+  rules:
+    - host: sample-service.excel.k8m.excel.io
+      http:
+        paths:
+          - backend:
+              serviceName: sample-service
+              servicePort: 5080
+            path: /
