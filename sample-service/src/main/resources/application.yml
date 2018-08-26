@@ -3,7 +3,7 @@ spring:
     name: sample-service
 
 server:
-  port: 5080
+  port: ${VPORT:5080}
 
 security:
   basic:
@@ -25,9 +25,9 @@ eureka:
     secure-port-enabled: false
     non-secure-port-enabled: true
     leaseRenewalIntervalInSeconds: 5
-    nonSecurePort: 5080
+    nonSecurePort: ${server.port}
     statusPageUrlPath: http://sample-service.excel.k8m.excel.io/info
     status-page-url: http://sample-service.excel.k8m.excel.io/info
-    healthCheckUrlPath: http://sample-service:5080/health
-    homePageUrl: https://sample-service:5080/
-    home-page-url: https://sample-service:5080/
+    healthCheckUrlPath: http://sample-service:${server.port}/health
+    homePageUrl: https://sample-service:${server.port}/
+    home-page-url: https://sample-service:${server.port}/

@@ -10,7 +10,7 @@ metadata:
   name: sample-service
   namespace: excel
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:

@@ -14,11 +14,11 @@ management:
     enabled: false
 eureka:
   client:
-    fetchRegistry: true
+    fetchRegistry: false
     preferIpAddress: true
     healthcheck:
       enabled: false
-    enabled: true
+    enabled: false
     serviceUrl:
       defaultZone: http://eureka-service:8761/eureka
   instance:
@@ -39,3 +39,15 @@ zuul:
     micro-service:
       path: /microservice/**
       url: http://localhost:5080/
+    aws-service:
+      path: /aws/**
+      serviceId: awsservice
+      
+awsservice:
+  ribbon:
+    ServerListRefreshInterval: 15000
+    listOfServers: localhost:5080,localhost:5081
+
+ribbon:
+  eureka:
+    enabled: false  
