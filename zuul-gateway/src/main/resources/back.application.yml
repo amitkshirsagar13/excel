@@ -3,7 +3,7 @@ spring:
     name: zuul-gateway
 
 server:
-  port: ${VPORT:8080}
+  port: ${VPORT:6050}
   ssl:
     enabled: false
     key-store: classpath:keystore.jks
@@ -32,26 +32,23 @@ eureka:
     secure-port-enabled: false
     non-secure-port-enabled: true
     leaseRenewalIntervalInSeconds: 5
-    nonSecurePort: ${VPORT:8080}
-    statusPageUrlPath: http://zuul-gateway.excel.k8m.excel.io:${VPORT:8080}/info
-    status-page-url: http://zuul-gateway.excel.k8m.excel.io:${VPORT:8080}/info
-    healthCheckUrlPath: http://zuul-gateway:${VPORT:8080}/health
-    homePageUrl: https://zuul-gateway:${VPORT:8080}/
-    home-page-url: https://zuul-gateway:${VPORT:8080}/
+    nonSecurePort: ${VPORT:6050}
+    statusPageUrlPath: http://zuul-gateway.excel.k8m.excel.io:${VPORT:6050}/info
+    status-page-url: http://zuul-gateway.excel.k8m.excel.io:${VPORT:6050}/info
+    healthCheckUrlPath: http://zuul-gateway:${VPORT:6050}/health
+    homePageUrl: https://zuul-gateway:${VPORT:6050}/
+    home-page-url: https://zuul-gateway:${VPORT:6050}/
     
 zuul:
   routes:
-    micro-service:
-      path: /microservice/**
-      url: http://localhost:5080/
-    aws-service:
-      path: /aws/**
-      serviceId: awsservice
+    ovpn_servers:
+      path: /**
+      serviceId: ovpn_servers
       
-awsservice:
+ovpn_servers:
   ribbon:
     ServerListRefreshInterval: 15000
-    listOfServers: localhost:5080,localhost:5081
+    listOfServers: 23.96.48.184:6055,23.100.27.232:6055
 
 ribbon:
   eureka:
