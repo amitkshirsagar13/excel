@@ -34,7 +34,6 @@ eureka:
     homePageUrl: https://zuul-gateway:8080/
     home-page-url: https://zuul-gateway:8080/
     
-    
 zuul:
   routes:
     micro-service:
