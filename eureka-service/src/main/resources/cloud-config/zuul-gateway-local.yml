@@ -1,3 +1,7 @@
+eureka:
+  client:
+    fetchRegistry: true
+    
 zuul:
   routes:
     micro-service:
