@@ -1,0 +1,17 @@
+zuul:
+  routes:
+    micro-service:
+      path: /microservice/**
+      url: http://localhost:5080/
+    aws-service:
+      path: /aws/**
+      serviceId: awsservice
+      
+awsservice:
+  ribbon:
+    ServerListRefreshInterval: 15000
+    listOfServers: localhost:5080,localhost:5081
+
+ribbon:
+  eureka:
+    enabled: false

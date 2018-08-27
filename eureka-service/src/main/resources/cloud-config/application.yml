@@ -1,47 +1,19 @@
-spring:
-  cloud:
-    config:
-      discovery:
-        enabled: true
-      uri: ${VCONFIGCONTEXTPATH:config}
-      server:
-        prefix: /${VCONFIGCONTEXTPATH:config}
-        native:
-          search-locations: classpath:cloud-config/
-        git:
-          uri: ${VGITCONFIGURL:https://github.com/amitkshirsagar13/cloud-config.git}
-  profiles:
-    active: ${VPROFILE:native}
-  user:
-    roles: ACTUATOR
-
+server:
+  context-path: ${VCONTEXTPATH:/}
+  display-name: ${${spring.application.name}.${spring.profiles.active}.${VDOMAIN:k8scluster.io}:${VHOSTNAME:${HOSTNAME:localhost}}}
+  port: ${VPORT:80}
 security:
   basic:
-    enabled: true
-  user:
-    name: ${VEUREKAUSER:config}
-    password: ${VEUREKAPASS:config}
-
-info:
-  component: Spring Eureka Config Services
-  
-server:
-  context-path: /${VEUREKACONTEXTPATH:registry}
-  display-name: ${${spring.application.name}.${spring.profiles.active}.${VDOMAIN:k8scluster.io}:${VHOSTNAME:${HOSTNAME:localhost}}}
-  port: ${VPORT:8761}
+    enabled: false
 management:
   context-path: /${VADMINPATH:admin}
   security:
-    enabled: true
-  ssl:
-    enabled: ${VSSL:false}
-    key-store: ${VKEYSTORE:'classpath:keystore.jks'}
-    key-store-password: ${VKEYSTOREPASSWORD:password}
-    key-alias: ${VKEYSTOREUSER:tomcat}
+    enabled: false
+
 eureka:
   client:
     enabled: true
-    registerWithEureka: false
+    registerWithEureka: true
     fetchRegistry: false
     region: ${VREGION:default}
     serviceUrl:
@@ -61,19 +33,25 @@ eureka:
     home-page-url: http://${server.display-name}:${server.port}${server.context-path}
     status-page-url: http://${server.display-name}:${server.port}${server.context-path}${management.context-path}/info
 
-  server:
-    enable-self-preservation: true
-    renewalPercentThreshold: 0.0
-    waitTimeInMsWhenSyncEmpty: 0
+    
 endpoints:
   restart:
     enabled: true
   shutdown:
     enabled: true
+    
 logging:
   level:
     ROOT: INFO
     org.springframework.web: WARN
+    
+spring:
+  cloud:
+    config:
+      discovery:
+        enabled: true
+  user:
+    roles: ACTUATOR
 
 hystrix:
   command:

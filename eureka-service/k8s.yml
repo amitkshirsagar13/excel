@@ -4,7 +4,38 @@ kind: Namespace
 metadata:
   name: excel
 ---
-apiVersion: extensions/v1beta1
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eureka-config
+  namespace: excel
+data:
+  VCONFIGCONTEXTPATH: config
+  VEUREKACONTEXTPATH: registry
+  VADMINPATH: admin
+  VREGION: default
+  VEUREKAUSER: config
+  VEUREKAPASS: config
+  VCONFIGUSER: config
+  VCONFIGPASS: config
+  VEUREKAHOST: eureka-service
+  VEUREKAPORT: 80
+  VCONFIGHOST: eureka-service
+  VCONFIGPORT: 80
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eureka-config-service
+  namespace: excel
+data:
+  VDOMAIN: k8scluster.io
+  VPROFILE: excel
+  VSERVICENAME: eureka-service
+  VCONTEXTPATH: /
+  VPORT: 80
+---
+apiVersion: v1
 kind: Deployment
 metadata:
   name: eureka-service
@@ -20,8 +51,13 @@ spec:
       containers:
       - name: eureka-service
         image: amitkshirsagar13/excel-eureka-service
+        envFrom:
+         - configMapRef:
+             name: eureka-config
+         - configMapRef:
+             name: eureka-config-service
         ports:
-        - containerPort: 8761
+        - containerPort: 80
 ---
 kind: Service
 apiVersion: v1
@@ -33,12 +69,12 @@ spec:
     app: eureka-service
   ports:
     - protocol: TCP
-      port: 8761
-      targetPort: 8761
+      port: 80
+      targetPort: 80
       nodePort: 30761
   type: NodePort
 ---
-apiVersion: extensions/v1beta1
+apiVersion: v1
 kind: Ingress
 metadata:
   annotations:
@@ -52,10 +88,10 @@ spec:
     serviceName: default-http-backend
     servicePort: 80
   rules:
-    - host: eureka-service.excel.k8m.excel.io
+    - host: eureka-service.excel.k8m.k8cluster.io
       http:
         paths:
           - backend:
               serviceName: eureka-service
-              servicePort: 8761
+              servicePort: 80
             path: /

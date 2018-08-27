@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: ${VSERVICENAME:sample-service}
+  profiles:
+    active: ${VPROFILE:local}
+  cloud:
+    config:
+      label: ${VGITBRANCH:master}
+      uri: http://${VCONFIGHOST:localhost}:${VCONFIGPORT:8761}/${VEUREKACONTEXTPATH:registry}/${VCONFIGCONTEXTPATH:config}
+      username: ${VCONFIGUSER:config}
+      password: ${VCONFIGPASS:config}
