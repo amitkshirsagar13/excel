@@ -38,7 +38,7 @@ eureka:
     healthCheckUrlPath: http://zuul-gateway:${VPORT:6050}/health
     homePageUrl: https://zuul-gateway:${VPORT:6050}/
     home-page-url: https://zuul-gateway:${VPORT:6050}/
-    
+
 zuul:
   routes:
     ovpn_servers:

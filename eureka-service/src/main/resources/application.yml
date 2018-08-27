@@ -1,6 +1,13 @@
 server:
-  port: 8761
+  port: ${VPORT:8761}
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.jks
+    key-store-password: password
+    key-alias: tomcat
 eureka:
+  server:
+    enable-self-preservation: true
   instance:
     hostname: localhost
   client:
