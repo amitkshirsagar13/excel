@@ -1,6 +1,9 @@
 eureka:
   client:
-    fetchRegistry: true
+    enabled: false
+    fetchRegistry: false
+    registerWithEureka: false
+    
     
 zuul:
   routes:
@@ -14,7 +17,7 @@ zuul:
 awsservice:
   ribbon:
     ServerListRefreshInterval: 15000
-    listOfServers: localhost:5080,localhost:5081
+    listOfServers: localhost:6055
 
 ribbon:
   eureka:

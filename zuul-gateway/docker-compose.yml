@@ -1,0 +1,20 @@
+version: '3'
+services:
+  zuul-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 1
+    image: 'amitkshirsagar13/excel-zuul-gateway'
+    labels:
+      - 'service=zuul-gateway'
+    ports:
+      - '8080:8080'
+    environment:
+      - ENV=dev
+    networks:
+      - springcluster
+networks:
+  springcluster:
+    external: false
