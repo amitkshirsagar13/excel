@@ -41,7 +41,7 @@ metadata:
   name: eureka-service
   namespace: ${NAMESPACE}
 spec:
-  replicas: 1
+  replicas: ${REPLICA_NUM}
   template:
     metadata:
       labels:
