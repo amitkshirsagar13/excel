@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: excel
+  name: ${NAMESPACE}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: eureka-config
-  namespace: excel
+  namespace: ${NAMESPACE}
 data:
   VCONFIGCONTEXTPATH: config
   VEUREKACONTEXTPATH: registry
@@ -27,7 +27,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: eureka-config-service
-  namespace: excel
+  namespace: ${NAMESPACE}
 data:
   VDOMAIN: k8scluster.io
   VPROFILE: excel
@@ -39,7 +39,7 @@ apiVersion: v1
 kind: Deployment
 metadata:
   name: eureka-service
-  namespace: excel
+  namespace: ${NAMESPACE}
 spec:
   replicas: 1
   template:
@@ -63,7 +63,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: eureka-service
-  namespace: excel
+  namespace: ${NAMESPACE}
 spec:
   selector:
     app: eureka-service
@@ -82,13 +82,13 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/tls-acme: "true"
   name: eureka-service
-  namespace: excel
+  namespace: ${NAMESPACE}
 spec:
   backend:
     serviceName: default-http-backend
     servicePort: 80
   rules:
-    - host: eureka-service.excel.k8m.k8cluster.io
+    - host: eureka-service.${NAMESPACE}.${VNODE}.${VDOMAIN}
       http:
         paths:
           - backend:
