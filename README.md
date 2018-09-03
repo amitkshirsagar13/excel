@@ -4,3 +4,7 @@ keytool -genkeypair -alias tomcat -keyalg RSA -keysize 2048 -keystore keystore.j
 keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.jks -deststoretype pkcs12
 ```
 
+## Git Cred Store:
+```
+git config --global credential.helper wincred
+```
