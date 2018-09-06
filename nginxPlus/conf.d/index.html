@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <title>NGINX OpenID Connect demo</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="client-id.apps.googleusercontent.com">
+    <script src="/js.cookie.js"></script>
+</head>
+
+<body>
+    <h2>NGINX OpenID Connect demo</h2>
+    <hr/>
+    <h3>Login with a Google account then visit the <a href="/private/test.html">private area</a>.</h3>
+    <table>
+        <tr>
+            <td>
+                <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+            </td>
+            <script>
+                function onSignIn(googleUser) {
+                    var profile = googleUser.getBasicProfile();
+                    Cookies.set('auth_token', googleUser.getAuthResponse().id_token);
+                    document.getElementById('google_signout').innerHTML = '<a href="#" onclick="signOut();"><img src="' + profile.getImageUrl() + '" width=32 height=32>Sign out</a>';
+                };
+                function signOut() {
+                    var auth2 = gapi.auth2.getAuthInstance();
+                    auth2.signOut().then(function () {
+                        Cookies.remove('auth_token');
+                        document.getElementById('google_signout').innerHTML = '';
+                    });
+                }
+            </script>
+            <td>
+                <div id="google_signout"></div>
+            </td>
+        </tr>
+    </table>
+    <hr/>
+</body>
+
+</html>

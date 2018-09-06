@@ -1,0 +1,22 @@
+<html>
+
+<head>
+</head>
+
+<body>
+
+    You are awesome and you are logged in as
+    <div id='email'>
+    </div>
+    <script type='text/javascript'>
+        var req = new XMLHttpRequest();
+        req.open('GET', document.location, false);
+        req.send(null);
+        var headers = req.getAllResponseHeaders().toLowerCase();
+        var div = document.getElementById('email');
+        div.innerHTML = headers;
+    </script>
+
+</body>
+
+</html>

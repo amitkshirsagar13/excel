@@ -39,3 +39,13 @@ map $jwt_claim_sub $jwt_status {
 ```
 ./token.sh test
 ```
+
+### Google API jwk
+
+Update in Crontab:
+```
+0 * * * * wget https://www.googleapis.com/oauth2/v3/certs -O /etc/nginx/conf.d/google_certs.jwk
+```
+
+Create Google+ api account:
+https://www.nginx.com/blog/authenticating-users-existing-applications-openid-connect-nginx-plus/#appendix
