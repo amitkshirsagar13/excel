@@ -1,0 +1,17 @@
+version: '2'
+services:
+  mysql:
+    container_name: oauth2-mysql
+    image: hypriot/rpi-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: oauth2
+      MYSQL_USER: oauth2
+      MYSQL_PASSWORD: oauth2
+      MYSQL_ROOT_PASSWORD: oauth2
+      MYSQL_ROOT_HOST: '%'
+    ports:
+    - "3306:3306"
+    volumes:
+    - /media/pi/Entertainment/DB/mysql-d:/var/lib/mysql
+    
