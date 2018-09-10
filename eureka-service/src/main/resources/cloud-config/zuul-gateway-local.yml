@@ -8,8 +8,8 @@ eureka:
 zuul:
   routes:
     micro-service:
-      path: /microservice/**
-      url: http://localhost:5080/
+      path: /sample-service/**
+      url: http://localhost:8090/
     aws-service:
       path: /aws/**
       serviceId: awsservice
