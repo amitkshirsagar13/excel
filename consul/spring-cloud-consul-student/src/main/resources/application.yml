@@ -1,0 +1,23 @@
+server:
+  port: ${VPORT:8899}
+spring:
+  application:
+    name: student-service
+  cloud:
+    consul:
+      host: ${VHOST_CONSUL:172.17.0.2}
+      port: 8500
+      discovery:
+        enabled: true
+        register: true
+        prefer-ip-address: true
+        #ip-address: ${VHOST_DOCKER:40.114.83.130} 
+        port: ${server.port}
+        register-health-check: true
+        health-check-critical-timeout: 5m
+        healthCheckPath: /health
+endpoints.health.sensitive: false
+management.health.consul.enabled: false
+management:
+  security:
+    enabled: false

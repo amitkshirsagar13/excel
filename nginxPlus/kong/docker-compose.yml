@@ -1,0 +1,72 @@
+version: '3.7'
+services:
+  kong-db:
+    image: postgres
+    ports:
+      - 127.0.0.1:5432:5432
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_PASSWORD: kong
+      POSTGRES_DB: kong
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - db-volume:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: 'echo "select 1" | psql -U kong kong || exit 1'
+      interval: 1m
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+  kong:
+    image: kong
+    ports:
+      - 127.0.0.1:8000:8000
+      - 127.0.0.1:8443:8443
+      - 127.0.0.1:8001:8001
+      - 127.0.0.1:8444:8444
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-db
+      KONG_PG_DATABASE: kong
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kong
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+    links:
+      - kong-db
+# uncomment following line to run migrations for a new database
+    command: kong migrations up -v
+    depends_on:
+      - kong-db
+    healthcheck:
+      test: 'curl -f http://localhost:8001/status || exit 1'
+      interval: 1m
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+  konga:
+    image: pantsel/konga
+    container_name: konga
+    links:
+      - kong-db
+      - kong
+    depends_on:
+      - kong-db
+      - kong
+    ports:
+      - 1337:1337
+    environment:
+      - DB_ADAPTER=postgres # 'mongo','postgres','sqlserver'  or 'mysql'
+      - DB_HOST=kong-db
+      - DB_PORT=5432 # Defaults to the default db port
+      - DB_USER=kong # Omit if not relevant
+      - DB_PASSWORD=kong # Omit if not relevant
+      - DB_DATABASE=kong # Defaults to 'konga_database'
+      - NODE_ENV=development  #  "production" or "development" | defaults to 'development'
+
+volumes:
+  db-volume:
+# tutorial use for reference
+# https://blog.codecentric.de/en/2017/11/api-management-kong/
