@@ -30,7 +30,8 @@ public class RequestHeaderFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
-		resp.addHeader("servedBy", InetAddress.getLocalHost().getHostAddress());
+		resp.addHeader("servedBy",
+				InetAddress.getLocalHost().getHostAddress() + ":" + InetAddress.getLocalHost().getHostName());
 		// Goes to default servlet
 		chain.doFilter(req, resp);
 
