@@ -3,27 +3,52 @@
 	name="spring-boot-log-to-kafka" packages="io.k8cluster">
 	<Appenders>
 		<Kafka name="kafkaAppender" topic="logs">
-			<JSONLayout />
+			<JSONLayout complete="true" compact="false">
+				<KeyValuePair key="application_name"
+					value="${sys:application.name}" />
+				<KeyValuePair key="application_version"
+					value="${sys:application.version}" />
+				<KeyValuePair key="environment_type"
+					value="${sys:deploy_env}" />
+				<KeyValuePair key="cluster_location"
+					value="${sys:cluster_location}" />
+				<KeyValuePair key="cluster_name"
+					value="${sys:cluster_name}" />
+				<KeyValuePair key="hostname" value="${sys:hostName}" />
+				<KeyValuePair key="host_ip" value="${sys:host_ip}" />
+				<KeyValuePair key="contextname"
+					value="${env:contextName}" />
+
+				<!--Example of using system property substitution -->
+				<KeyValuePair key="application_user"
+					value="${sys:user.name}" />
+
+				<!--Example of using environment property substitution env:USERNAME on 
+					windows -->
+				<KeyValuePair key="environment_user"
+					value="${env:USER}" />
+			</JSONLayout>
 			<Property name="bootstrap.servers">192.168.1.111:9092</Property>
 		</Kafka>
-
 		<Console name="stdout" target="SYSTEM_OUT">
-			<JSONLayout />
 			<PatternLayout
-				pattern="%d{HH:mm:ss.SSS} %-5p [%-7t] %F:%L - %m%n" />
+				pattern="%d{HH:mm:ss.SSS} %highlight{%-5p}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} [%-7t] %F:%L - %m%n" />
 		</Console>
 		<Console name="stderr" target="SYSTEM_ERR">
 			<PatternLayout
-				pattern="%d{HH:mm:ss.SSS} %-5p [%-7t] %F:%L - %m%n" />
+				pattern="%d{HH:mm:ss.SSS} %highlight{%-5p}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} [%-7t] %F:%L - %m%n" />
 			<Filters>
 				<ThresholdFilter level="WARN" onMatch="ACCEPT" />
 			</Filters>
 		</Console>
 
+		<Async name="asyncAppender" bufferSize="80">
+			<AppenderRef ref="kafkaAppender" />
+		</Async>
 	</Appenders>
 	<Loggers>
 		<Root level="INFO">
-			<AppenderRef ref="kafkaAppender" />
+			<AppenderRef ref="asyncAppender" />
 
 			<AppenderRef ref="stdout" />
 			<AppenderRef ref="stderr" />
