@@ -1,18 +1,33 @@
-version: '3.3'
+version: '2'
+
+volumes:
+  mongo_data:
+  cassandra_data:
+
 services:
 
-#Create a new empty database for kong to use
-# postgress used instead of cassendra as I haven't been able to find a healthcheck command for cassendra
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+  konga:
+    image: pantsel/konga:latest #(or latest)
+    container_name: konga
     depends_on:
-      - db
+      - kong
+    ports:
+      - 1337:1337
     links:
-      - db
+      - mongo:mongo
+      - kong:kong
+    environment:
+      - DB_ADAPTER=mongo
+      - DB_HOST=mongo
+      - DB_DATABASE=konga
+      - NODE_ENV=development
+
+  mongo:
+    image: mongo
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - 127.0.0.1:27017:27017
 
   db:
     image: postgres
@@ -23,11 +38,6 @@ services:
       POSTGRES_USER: kong
       POSTGRES_PASSWORD: kong
       POSTGRES_DB: kong
-    healthcheck:
-      test: 'echo "select 1" | psql -U kong kong || exit 1'
-      interval: 1m
-      timeout: 3s
-      retries: 3
 
   #######################################
   # Kong database migration
@@ -74,38 +84,5 @@ services:
       - db
     links:
       - db
-    healthcheck:
-      test: ["CMD-SHELL", "curl -I -s -L http://127.0.0.1:8000 || exit 1"]
-      interval: 5s
-      retries: 10
 
 
-  #######################################
-  # Konga database prepare
-  #######################################
-  konga-prepare:
-    image: pantsel/konga:next
-    command: "-c prepare -a postgres -u postgresql://kong@db:5432/"
-    restart: on-failure
-    links:
-      - db
-    depends_on:
-      - db
-
-  #######################################
-  # Konga: Kong GUI
-  #######################################
-  konga:
-    image: pantsel/konga
-    restart: always
-    environment:
-      DB_ADAPTER: postgres
-      DB_HOST: db
-      DB_DATABASE: konga-database
-      #TOKEN_SECRET: km1GUr4RkcQD7DewhJPNXrCuZwcKmqjb
-      NODE_ENV: production
-    depends_on:
-      - db
-      - konga-prepare
-    ports:
-      - "1337:1337"
