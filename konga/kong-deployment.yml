@@ -4,6 +4,15 @@ kind: Namespace
 metadata:
   name: kong
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: regsecret
+  namespace: kong
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJrb25nLWRvY2tlci1rb25nLWVudGVycHJpc2UtZWRpdGlvbi1kb2NrZXIuYmludHJheS5pbyI6eyJ1c2VybmFtZSI6Im1hc3RlcmNhcmRfZXZhbF9yYWplc2gtZXZ1cmlAa29uZyIsInBhc3N3b3JkIjoiMmNkYzEyNjZhM2I1NTIxNTFlYjk4ZGQ1ODRlYTQzNGE1MjA3YjQwNyIsImVtYWlsIjoicmFqZXNoQGdtYWlsLmNvbSIsImF1dGgiOiJiV0Z6ZEdWeVkyRnlaRjlsZG1Gc1gzSmhhbVZ6YUMxbGRuVnlhVUJyYjI1bk9qSmpaR014TWpZMllUTmlOVFV5TVRVeFpXSTVPR1JrTlRnMFpXRTBNelJoTlRJd04ySTBNRGM9In19fQ==
+---
 kind: Service
 apiVersion: v1
 metadata:
@@ -71,17 +80,19 @@ spec:
       labels:
         app: kong-app
     spec:
+      imagePullSecrets:
+        - name: regsecret
       terminationGracePeriodSeconds: 60
       initContainers:
       - name: init-kong
-        image: kong-ee:latest
+        image: kong-docker-kong-enterprise-edition-docker.bintray.io/kong-enterprise-edition
         envFrom:
         - configMapRef:
             name: kong-env
         command: ['sh', '-c', 'migrations up']
       containers:
       - name: kong
-        image: kong-ee:latest
+        image: kong-docker-kong-enterprise-edition-docker.bintray.io/kong-enterprise-edition
         envFrom:
         - configMapRef:
             name: kong-env
